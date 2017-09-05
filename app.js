@@ -1,9 +1,9 @@
-var express = require("express"),
-app     = express(),
-mongoose = require("mongoose"),
-bodyParser = require("body-parser"),
-expressSanitizer = require("express-sanitizer"),
-methodOverride = require('method-override');
+var express          = require("express"),
+    app              = express(),
+    mongoose         = require("mongoose"),
+    bodyParser       = require("body-parser"),
+    expressSanitizer = require("express-sanitizer"),
+    methodOverride   = require('method-override');
 
 mongoose.connect("mongodb://localhost/todo_app");
 app.use(express.static('public'));
@@ -27,13 +27,17 @@ app.get("/todos", function(req, res){
     if(err){
       console.log(err);
     } else {
-      res.render("index", {todos: todos}); 
+      if(req.xhr) {
+        res.json(todos);
+      } else {
+        res.render("index", {todos: todos});
+      }
     }
   })
 });
 
 app.get("/todos/new", function(req, res){
- res.render("new"); 
+ res.render("new");
 });
 
 app.post("/todos", function(req, res){
@@ -43,7 +47,11 @@ app.post("/todos", function(req, res){
     if(err){
       res.render("new");
     } else {
+      if(req.xhr) {
+        res.json(newTodo);
+      } else {
         res.redirect("/todos");
+      }
     }
   });
 });
@@ -55,7 +63,7 @@ app.get("/todos/:id/edit", function(req, res){
      res.redirect("/")
    } else {
       res.render("edit", {todo: todo});
-   }
+    }
  });
 });
 
@@ -64,7 +72,11 @@ app.put("/todos/:id", function(req, res){
    if(err){
      console.log(err);
    } else {
-      res.redirect('/');
+     if(req.xhr) {
+       res.json(todo);
+     } else {
+       res.redirect('/');
+     }
    }
  });
 });
@@ -77,7 +89,7 @@ app.delete("/todos/:id", function(req, res){
       todo.remove();
       res.redirect("/todos");
    }
- }); 
+ });
 });
 
 
