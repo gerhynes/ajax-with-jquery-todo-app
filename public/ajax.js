@@ -1,14 +1,14 @@
-$.get("/todos", function(data){
-  debugger
-});
-
-$("form").submit(function(e) {
-  e.preventDefault();
-  var formData = $(this).serialize();
-  $.post("/todos", formData, function(data) {
-    console.log(data);
-  });
-});
+// $.get("/todos", function(data){
+//   console.log(data);
+// });
+//
+// $("form").submit(function(e) {
+//   e.preventDefault();
+//   var formData = $(this).serialize();
+//   $.post("/todos", formData, function(data) {
+//     console.log(data);
+//   });
+// });
 
 $("form").submit(function(e) {
   e.preventDefault();
@@ -16,10 +16,10 @@ $("form").submit(function(e) {
   var formAction = $(this).attr("action");
   $.ajax({
     url: formAction,
-    data: formData
+    data: formData,
     type: 'PUT',
     success: function(data) {
       debugger
     }
-  })
+  });
 });
