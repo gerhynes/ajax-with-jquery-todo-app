@@ -82,12 +82,15 @@ app.put("/todos/:id", function(req, res){
 });
 
 app.delete("/todos/:id", function(req, res){
- Todo.findById(req.params.id, function(err, todo){
+ Todo.findByIdAndRemove(req.params.id, function(err, todo){
    if(err){
      console.log(err);
    } else {
-      todo.remove();
+     if(req.xhr) {
+       res.json(todo);
+     } else {
       res.redirect("/todos");
+    }
    }
  });
 });
