@@ -70,7 +70,7 @@ $("#todo-list").on("submit", ".edit-item-form", function(e) {
   e.preventDefault();
   var toDoItem = $(this).serialize();
   var actionUrl = $(this).attr("action");
-  $originalItem = $(this).parent(".list-group-item");
+  var $originalItem = $(this).parent(".list-group-item");
   $.ajax({
     url: actionUrl,
     data: toDoItem,
@@ -100,4 +100,23 @@ $("#todo-list").on("submit", ".edit-item-form", function(e) {
       )
     }
   });
+});
+
+$("#todo-list").on("submit", ".delete-item-form", function(e) {
+  e.preventDefault();
+  var confirmResponse = confirm("Are you sure?");
+  if(confirmResponse) {
+    var actionUrl = $(this).attr("action");
+    var $itemToDelete = $(this).closest(".list-group-item");
+    $.ajax({
+      url: actionUrl,
+      type: "DELETE",
+      itemToDelete: $itemToDelete,
+      success: function(data) {
+        this.itemToDelete.remove();
+      }
+    });
+  } else {
+    $(this).find("button").blur();
+  }
 });
